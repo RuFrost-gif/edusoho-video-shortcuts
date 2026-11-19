@@ -235,9 +235,10 @@
     else if (r === 'noplayer') showTip('未找到视频播放器', 'rgba(200,60,60,.92)');
   }
 
-  // 只挂一层（document 捕获阶段），避免 window+document 双层监听导致 keyup 触发两次
-  document.addEventListener('keydown', onKeyDown, true);
-  document.addEventListener('keyup', onKeyUp, true);
+  // 挂到 window 捕获阶段（最顶层、最早收到），避免被页面代码 stopPropagation 拦截。
+  // keydown 和 keyup 只各挂一层，防止重复触发。
+  window.addEventListener('keydown', onKeyDown, true);
+  window.addEventListener('keyup', onKeyUp, true);
 
   // 双击页面空白处触发诊断（调试用）
   document.addEventListener('dblclick', function (e) {
